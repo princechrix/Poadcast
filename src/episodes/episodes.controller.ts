@@ -1,27 +1,46 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  DefaultValuePipe,
+  Get,
+  HttpException,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
+import { CreateEpisodeDto, EpisodesService } from './episodes.service';
 
 @Controller('episodes')
 export class EpisodesController {
+  constructor(private episodesService: EpisodesService) {}
+
   @Get()
-  findAll(@Query('sort') sort: 'asc' | 'desc' = 'desc') {
+  findAll(
+    @Query('sort') sort: 'asc' | 'desc' = 'desc',
+    @Query('limit', new DefaultValuePipe(100), ParseIntPipe) limit: number,
+  ) {
     console.log(sort);
-    return 'All Episodes';
+    return this.episodesService.findAll(sort);
   }
 
   @Get('featured')
   findFeatured() {
-    return 'featured episodes';
+    return this.episodesService.findFeatured();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    console.log(id); 
-    return 'One Episode ' + id;
+  async findOne(@Param('id') id: string) {
+    const episode = await this.episodesService.findOne(id);
+    if (!episode) {
+      throw new HttpException('Episode not found', 404);
+    }
+    return this.episodesService.findOne(id);
   }
 
   @Post()
-  create(@Body() input: any) {
+  create(@Body() input: CreateEpisodeDto) {
     console.log(input);
-    return 'new Episode';
+    return this.episodesService.create(input);
   }
 }

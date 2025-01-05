@@ -14,7 +14,12 @@ export class CreateEpisodeDto {
 
 @Injectable()
 export class EpisodesService {
-  private episodes: Episode[] = [];
+  private episodes: Episode[] = [
+    {
+      id: '1',
+      name: 'Episode 1',
+    },
+  ];
 
   async findAll(sort: 'asc' | 'desc' = 'desc') {
     const sortAsc = (a: Episode, b: Episode) => (a.name > b.name ? 1 : -1);
