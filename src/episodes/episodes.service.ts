@@ -10,7 +10,7 @@ export class Episode {
 export class CreateEpisodeDto {
   name: string;
   featured?: boolean;
-}
+} 
 
 @Injectable()
 export class EpisodesService {
