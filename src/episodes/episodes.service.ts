@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 
-export class Episode {
+export class Episode { 
   id: string;
   name: string;
   featured?: boolean;
